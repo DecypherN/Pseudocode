@@ -1,0 +1,47 @@
+DECLARE Words : ARRAY[1:3] OF STRING
+DECLARE Word, Scrambled, Guess : STRING
+DECLARE Index, i, TempIndex : INTEGER
+DECLARE Letters : ARRAY[1:10] OF STRING
+DECLARE Used : ARRAY[1:10] OF BOOLEAN
+DECLARE InputNumber : INTEGER
+
+Words[1] ← "APPLE"
+Words[2] ← "GAMING"
+Words[3] ← "PYTHON"
+
+OUTPUT "Choose a word number from 1 to 3:"
+INPUT Index
+Word ← Words[Index]
+
+Scrambled ← ""
+FOR i ← 1 TO LENGTH(Word)
+    Letters[i] ← MID(Word, i, 1)
+    Used[i] ← FALSE
+NEXT i
+
+OUTPUT "Enter numbers between 1 and " & LENGTH(Word) & " in the order to scramble letters."
+
+WHILE LENGTH(Scrambled) < LENGTH(Word) DO
+    OUTPUT "Enter number:"
+    INPUT InputNumber
+
+    IF InputNumber >= 1 AND InputNumber <= LENGTH(Word) THEN
+        IF Used[InputNumber] = FALSE THEN
+            Scrambled ← Scrambled & Letters[InputNumber]
+            Used[InputNumber] ← TRUE
+        ELSE
+            OUTPUT "Letter already used, try another."
+        ENDIF
+    ELSE
+        OUTPUT "Invalid number, try again."
+    ENDIF
+ENDWHILE
+
+OUTPUT "Unscramble this word: " & Scrambled
+INPUT Guess
+
+IF TO_UPPER(Guess) = Word THEN
+    OUTPUT "Correct!"
+ELSE
+    OUTPUT "Wrong! The word was: " & Word
+ENDIF
