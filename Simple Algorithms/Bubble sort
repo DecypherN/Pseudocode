@@ -1,0 +1,79 @@
+PROCEDURE BubbleSort(BYREF games: ARRAY OF Game, size: INTEGER, sorton: STRING, Order: STRING)
+    DECLARE temp: Game
+    DECLARE swap: BOOLEAN
+    DECLARE x: INTEGER
+    DECLARE y: INTEGER
+    
+    swap ← TRUE
+    WHILE swap = TRUE DO
+        swap ← FALSE
+        FOR x ← 1 TO size - 1 DO
+            IF sorton = "name" THEN
+                IF (Order = "ascending" AND games[x].name > games[x+1].name) OR (Order = "descending" AND games[x].name < games[x+1].name) THEN
+                    temp ← games[x]
+                    games[x] ← games[x+1]
+                    games[x+1] ← temp
+                    swap ← TRUE
+                ENDIF
+            ELSE IF sorton = "score" THEN
+                IF (Order = "ascending" AND games[x].score > games[x+1].score) OR (Order = "descending" AND games[x].score < games[x+1].score) THEN
+                    temp ← games[x]
+                    games[x] ← games[x+1]
+                    games[x+1] ← temp
+                    swap ← TRUE
+                ENDIF
+            ELSE IF sorton = "release_year" THEN
+                IF (Order = "ascending" AND games[x].release_year > games[x+1].release_year) OR (Order = "descending" AND games[x].release_year < games[x+1].release_year) THEN
+                    temp ← games[x]
+                    games[x] ← games[x+1]
+                    games[x+1] ← temp
+                    swap ← TRUE
+                ENDIF
+            ENDIF
+        NEXT x
+    ENDWHILE
+ENDPROCEDURE
+
+TYPE Game
+    DECLARE name: STRING
+    DECLARE score: INTEGER
+    DECLARE release_year: INTEGER
+ENDTYPE
+
+DECLARE games: ARRAY[1:5] OF Game
+DECLARE temp: STRING
+DECLARE swap: BOOLEAN
+DECLARE sortby: STRING
+DECLARE order: STRING
+
+games[1].name ← "SKYRIM"
+games[1].score ← 89
+games[1].release_year ← 2011
+
+games[2].name ← "TITANFALL 2"
+games[2].score ← 90
+games[2].release_year ← 2016
+
+games[3].name ← "AC ODDYSEY"
+games[3].score ← 85
+games[3].release_year ← 2018
+
+games[4].name ← "FORZA HORIZON 5"
+games[4].score ← 94
+games[4].release_year ← 2021
+
+games[5].name ← "BATMAN: ARKHAM ASYLUM"
+games[5].score ← 91
+games[5].release_year ← 2009
+
+OUTPUT "Enter sorting criteria (name, score, or release_year): "
+INPUT sortby
+
+OUTPUT "Enter sorting order (ascending or descending): "
+INPUT order
+
+CALL BubbleSort(games, 5, sortby, order)
+
+FOR x ← 1 TO 5 
+    OUTPUT "Game ", x, ": ", games[x].name, " | ", games[x].score, " | ", games[x].release_year
+NEXT x
