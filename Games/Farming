@@ -1,0 +1,225 @@
+// Procedures and Functions
+PROCEDURE printMenu
+ OUTPUT ""
+ OUTPUT "==================="
+ OUTPUT "Menu"
+ OUTPUT "==================="
+ OUTPUT "1. Cut"
+ OUTPUT "2. Wait"
+ OUTPUT "3. Shop"
+ OUTPUT "4. Balance"
+ OUTPUT "5. Potions Active"
+ OUTPUT "6. Controls"
+ OUTPUT "7. Exit"
+ OUTPUT "==================="
+ OUTPUT ""
+ENDPROCEDURE
+
+
+PROCEDURE printPlant (size:INTEGER)
+ OUTPUT "{ }"
+ FOR x <-- 1 TO size
+     OUTPUT " | "
+ NEXT x
+ OUTPUT ""
+ENDPROCEDURE
+
+
+PROCEDURE printControls
+ OUTPUT ""
+ OUTPUT "========"
+ OUTPUT "Controls"
+ OUTPUT "========"
+ OUTPUT "Cut- Cut the grass"
+ OUTPUT "Wait- Grow the grass"
+ OUTPUT "Shop- Visit the shop"
+ OUTPUT "Balance- View the grass"
+ OUTPUT "Active- View active Potions"
+ OUTPUT "Controls- view the Controls"
+ENDPROCEDURE
+
+
+FUNCTION wait(size: INTEGER, maxSize: INTEGER, deathChance: INTEGER) RETURNS STRING
+ DECLARE chance : REAL
+ chance <-- RAND(100)  //random 0 to 100 value
+ IF chance < deathChance OR size = maxSize THEN
+     RETURN "The Plant Dies"
+ ELSE
+     RETURN "The Plant Grows"
+ ENDIF
+ENDFUNCTION
+
+
+PROCEDURE printPotionMenu
+ OUTPUT ""
+ OUTPUT "Potion Shop"
+ OUTPUT "========================================"
+ OUTPUT "1. Potion of Max Growth (Increase Max Growth Size Potion by 1)(Cost: 10)"
+ OUTPUT "2. Potion of Undying (Reduce Plant Death Chance by 10%)(Cost: 15)"
+ OUTPUT "3. Potion of Extra Plants (Adds 1 More Plant to the Feild)(Cost: 25"
+ OUTPUT "4. Exit Shop"
+ OUTPUT "========================================"
+ OUTPUT ""
+ENDPROCEDURE
+
+
+// main
+
+
+// Declarations
+DECLARE j: INTEGER
+DECLARE choice: STRING
+DECLARE start: STRING
+DECLARE effect: STRING
+DECLARE i: INTEGER
+DECLARE maxGrowthSize: INTEGER
+DECLARE deathChance: INTEGER
+DECLARE total: INTEGER
+DECLARE spent: INTEGER
+DECLARE money: INTEGER
+DECLARE potionChoice: STRING
+DECLARE potionOfUndying: INTEGER
+DECLARE potionOfMaxGrowth: INTEGER
+DECLARE plantNumber: INTEGER
+
+
+// Initialize
+j <-- 5
+maxGrowthSize <-- 9
+deathChance <-- 40
+DECLARE field: ARRAY[1:j] OF INTEGER
+FOR i <-- 1 TO 5
+ field[i] <-- 0
+NEXT i
+
+
+OUTPUT "To start: press X"
+REPEAT
+ INPUT start
+ IF start <> "X" AND start <> "x" THEN
+     OUTPUT "Invalid input, try again"
+ ENDIF
+UNTIL start = "X" OR start = "x"
+
+
+REPEAT
+ CALL printMenu
+ OUTPUT "What is your choice?:"
+ INPUT choice
+
+
+ CASE OF choice
+     "Cut":
+         // Cut all plants and collect money
+         FOR i <-- 1 TO 5
+             money <-- money + field[i]
+             field[i] <-- 0
+             total <-- total + 1
+         NEXT i
+         OUTPUT "Cutting the plants"
+         FOR i <-- 1 TO 5
+             CALL printPlant(0)  // Output all plants as empty after cutting
+         NEXT i
+         OUTPUT "Money made: ", money
+
+
+     "Wait":
+     //growing plants and outputting
+         FOR i <-- 1 TO 5
+             IF field[i] = 0 THEN
+                 OUTPUT "Plant ", i, " grows."
+                 field[i] <-- field[i] + 1
+             ELSE
+                 effect <-- wait(field[i], maxGrowthSize, deathChance)
+                 IF effect = "The Plant Dies" THEN
+                     field[i] <-- 0
+                     OUTPUT "Plant ", i, " died."
+                 ELSE
+                     field[i] <-- field[i] + 1
+                     OUTPUT "Plant ", i, " grows."
+                 ENDIF
+             ENDIF
+         NEXT i
+         FOR i <-- 1 TO 5
+             CALL printPlant(field[i])
+         NEXT i
+
+
+     "Shop":
+         REPEAT
+             CALL printPotionMenu
+             OUTPUT "Choose Potion to buy:"
+             INPUT potionChoice
+
+
+             CASE OF potionChoice
+                 "1":
+                     IF money >= 10 THEN
+                         maxGrowthSize <-- maxGrowthSize + 1
+                         money <-- money - 10
+                         spent <-- spent + 10
+                         potionOfMaxGrowth <-- potionOfMaxGrowth + 1
+                         OUTPUT "Max growth size increased! New max size: ", maxGrowthSize
+                     ELSE
+                         OUTPUT "Not enough money to buy this!"
+                     ENDIF
+                 "2":
+                     IF money >= 15 THEN
+                         deathChance <-- deathChance - 10
+                         potionOfUndying <-- potionOfUndying + 1
+                         IF deathChance < 10 THEN
+                             deathChance <-- 10
+                         ENDIF
+                         money <-- money - 15
+                         spent <-- spent + 15
+                         OUTPUT "Plant death chance reduced! New death chance: ", deathChance, "%"
+                     ELSE
+                         OUTPUT "Not enough money to buy this!"
+                     ENDIF
+                 "3":
+                     IF money >= 25 THEN
+                         j <-- j + 1
+                         money <-- money - 25
+                         spent <-- spent + 25
+                         plantNumber <-- plantNumber + 1
+                         OUTPUT "New number of plants in the feild: ", j
+                     ELSE
+                         OUTPUT "Not enough money to buy this!"
+                     ENDIF
+                 "4":
+                     OUTPUT "Exiting shop."
+                 OTHERWISE:
+                     OUTPUT "Unknown option, please try again."
+             ENDCASE
+             OUTPUT money, " is your balance"
+         UNTIL potionChoice = "4"
+
+
+     "Balance":
+         OUTPUT "This is your balance:", money
+
+
+     "Active":
+         OUTPUT "You have ", potionOfUndying, " Potion of Undying active"
+         OUTPUT "You have ", potionOfMaxGrowth, " Potion of Max Growth active"
+         OUTPUT "You have ", plantNumber, " Potions of Extra Plants active"
+
+
+     "Controls":
+         CALL printControls
+
+
+     "Exit":
+         OUTPUT ""
+         OUTPUT "Ending stats:"
+         OUTPUT "============="
+         OUTPUT "Total plants cut:", total
+         OUTPUT "Total money earned:", money
+         OUTPUT "Total money spent:", spent
+         OUTPUT "Exiting the game... Game exitted."
+
+
+     OTHERWISE:
+         OUTPUT "Unknown option, please try again."
+ ENDCASE
+UNTIL choice = "Exit"
