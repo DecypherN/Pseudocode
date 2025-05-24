@@ -1,0 +1,61 @@
+DECLARE Maze : ARRAY[1:3, 1:3] OF STRING
+DECLARE X, Y : INTEGER
+DECLARE Command : STRING
+
+// Maze key: " " = empty, "W" = wall, "G" = goal
+Maze[1,1] ← " "
+Maze[1,2] ← "W"
+Maze[1,3] ← "G"
+Maze[2,1] ← " "
+Maze[2,2] ← " "
+Maze[2,3] ← "W"
+Maze[3,1] ← "W"
+Maze[3,2] ← " "
+Maze[3,3] ← " "
+
+X ← 2
+Y ← 1
+
+OUTPUT "You are in a maze. Find the goal. Move with N/S/E/W"
+
+WHILE Maze[X,Y] <> "G" DO
+    OUTPUT "You are at: (" & X & ", " & Y & ")"
+    INPUT Command
+
+    IF Command = "N" THEN
+        IF X > 1 AND Maze[X - 1, Y] <> "W" THEN
+            X ← X - 1
+        ELSE
+            OUTPUT "Can't move there!"
+        ENDIF
+    ELSE
+        IF Command = "S" THEN
+            IF X < 3 AND Maze[X + 1, Y] <> "W" THEN
+                X ← X + 1
+            ELSE
+                OUTPUT "Can't move there!"
+            ENDIF
+        ELSE
+            IF Command = "E" THEN
+                IF Y < 3 AND Maze[X, Y + 1] <> "W" THEN
+                    Y ← Y + 1
+                ELSE
+                    OUTPUT "Can't move there!"
+                ENDIF
+            ELSE
+                IF Command = "W" THEN
+                    IF Y > 1 AND Maze[X, Y - 1] <> "W" THEN
+                        Y ← Y - 1
+                    ELSE
+                        OUTPUT "Can't move there!"
+                    ENDIF
+                ELSE
+                    OUTPUT "Invalid command! Use N, S, E or W."
+                ENDIF
+            ENDIF
+        ENDIF
+    ENDIF
+
+ENDWHILE
+
+OUTPUT "You found the goal! 🎉"
