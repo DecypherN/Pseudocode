@@ -1,0 +1,32 @@
+DECLARE Queue : ARRAY[1:5] OF INTEGER
+DECLARE Front, Rear : INTEGER
+Front ← 1
+Rear ← 0
+
+PROCEDURE Enqueue(Item)
+    IF Rear < 5 THEN
+        Rear ← Rear + 1
+        Queue[Rear] ← Item
+    ELSE
+        OUTPUT "Queue Overflow"
+    ENDIF
+ENDPROCEDURE
+
+PROCEDURE Dequeue()
+    IF Front <= Rear THEN
+        Item ← Queue[Front]
+        Front ← Front + 1
+        RETURN Item
+    ELSE
+        OUTPUT "Queue Underflow"
+    ENDIF
+ENDPROCEDURE
+
+test data:
+Enqueue(5)
+Enqueue(15)
+Enqueue(25)
+OUTPUT Dequeue()  // 5
+OUTPUT Dequeue()  // 15
+OUTPUT Dequeue()  // 25
+OUTPUT Dequeue()  // Queue Underflow
