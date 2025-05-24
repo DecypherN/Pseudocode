@@ -1,0 +1,59 @@
+
+TYPE Node
+    DECLARE Data : INTEGER
+    DECLARE NextPointer : INTEGER
+ENDTYPE
+
+DECLARE List : ARRAY[0:4] OF Node
+DECLARE HeadPointer : INTEGER
+DECLARE FreePointer : INTEGER
+
+HeadPointer ← -1
+FreePointer ← 0
+
+// Initialize Free List
+FOR i ← 0 TO 3 DO
+    List[i].NextPointer ← i + 1
+ENDFOR
+List[4].NextPointer ← -1
+
+PROCEDURE InsertAtEnd(NewData)
+    IF FreePointer ≠ -1 THEN
+        NewNode ← FreePointer
+        FreePointer ← List[FreePointer].NextPointer
+
+        List[NewNode].Data ← NewData
+        List[NewNode].NextPointer ← -1
+
+        IF HeadPointer = -1 THEN
+            HeadPointer ← NewNode
+        ELSE
+            Current ← HeadPointer
+            WHILE List[Current].NextPointer ≠ -1 DO
+                Current ← List[Current].NextPointer
+            ENDWHILE
+            List[Current].NextPointer ← NewNode
+        ENDIF
+    ELSE
+        OUTPUT "No space in list"
+    ENDIF
+ENDPROCEDURE
+
+PROCEDURE Traverse()
+    Current ← HeadPointer
+    WHILE Current ≠ -1 DO
+        OUTPUT List[Current].Data
+        Current ← List[Current].NextPointer
+    ENDWHILE
+ENDPROCEDURE
+
+Test Data:
+
+InsertAtEnd(100)
+InsertAtEnd(200)
+InsertAtEnd(300)
+Traverse()
+// Output:
+// 100
+// 200
+// 300
