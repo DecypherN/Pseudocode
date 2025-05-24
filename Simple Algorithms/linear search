@@ -1,0 +1,7 @@
+FUNCTION linearSearch(find: INTEGER) RETURNS BOOLEAN
+    FOR x ← 1 TO 9
+        IF find = numbers[x] THEN
+            RETURN TRUE
+        ENDIF
+    NEXT x
+ENDFUNCTION
