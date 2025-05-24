@@ -1,0 +1,31 @@
+DECLARE Stack : ARRAY[1:5] OF INTEGER
+DECLARE Top : INTEGER
+Top ← 0
+
+PROCEDURE Push(Item)
+    IF Top < 5 THEN
+        Top ← Top + 1
+        Stack[Top] ← Item
+    ELSE
+        OUTPUT "Stack Overflow"
+    ENDIF
+ENDPROCEDURE
+
+PROCEDURE Pop()
+    IF Top > 0 THEN
+        Item ← Stack[Top]
+        Top ← Top - 1
+        RETURN Item
+    ELSE
+        OUTPUT "Stack Underflow"
+    ENDIF
+ENDPROCEDURE
+
+Test data:
+Push(10)
+Push(20)
+Push(30)
+OUTPUT Pop()   // 30
+OUTPUT Pop()   // 20
+OUTPUT Pop()   // 10
+OUTPUT Pop()   // Stack Underflow
