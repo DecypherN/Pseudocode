@@ -1,0 +1,75 @@
+DECLARE Player1Name, Player2Name : STRING
+DECLARE Player1HP, Player2HP : INTEGER
+DECLARE Turn, AttackChoice : INTEGER
+DECLARE HitChance, Damage : INTEGER
+DECLARE InputNumber : INTEGER
+
+Player1HP ← 100
+Player2HP ← 100
+
+OUTPUT "Enter Player 1 name:"
+INPUT Player1Name
+OUTPUT "Enter Player 2 name:"
+INPUT Player2Name
+
+Turn ← 1
+
+WHILE Player1HP > 0 AND Player2HP > 0 DO
+    IF Turn = 1 THEN
+        OUTPUT Player1Name & "'s Turn"
+        OUTPUT "1. Quick Attack (90% hit, 10 damage)"
+        OUTPUT "2. Power Slam (50% hit, 30 damage)"
+        INPUT AttackChoice
+
+        IF AttackChoice = 1 THEN
+            HitChance ← 90
+            Damage ← 10
+        ELSE
+            HitChance ← 50
+            Damage ← 30
+        ENDIF
+
+        OUTPUT "Enter a number from 1 to 100:"
+        INPUT InputNumber
+
+        IF InputNumber <= HitChance THEN
+            Player2HP ← Player2HP - Damage
+            OUTPUT "Hit! " & Player2Name & " now has " & Player2HP & " HP"
+        ELSE
+            OUTPUT "Miss!"
+        ENDIF
+
+        Turn ← 2
+    ELSE
+        OUTPUT Player2Name & "'s Turn"
+        OUTPUT "1. Quick Attack (90% hit, 10 damage)"
+        OUTPUT "2. Power Slam (50% hit, 30 damage)"
+        INPUT AttackChoice
+
+        IF AttackChoice = 1 THEN
+            HitChance ← 90
+            Damage ← 10
+        ELSE
+            HitChance ← 50
+            Damage ← 30
+        ENDIF
+
+        OUTPUT "Enter a number from 1 to 100:"
+        INPUT InputNumber
+
+        IF InputNumber <= HitChance THEN
+            Player1HP ← Player1HP - Damage
+            OUTPUT "Hit! " & Player1Name & " now has " & Player1HP & " HP"
+        ELSE
+            OUTPUT "Miss!"
+        ENDIF
+
+        Turn ← 1
+    ENDIF
+ENDWHILE
+
+IF Player1HP <= 0 THEN
+    OUTPUT Player2Name & " wins!"
+ELSE
+    OUTPUT Player1Name & " wins!"
+ENDIF
